@@ -1,23 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios';
+import React, { useState, useEffect } from 'react';
+import List from './components/List';
 
 function App() {
+
+  const [chars, setChars] = useState([]);
+
+  const getChars = async () => {
+    try {
+      const { data } = await axios.get('https://pokeapi.co/api/v2/pokemon?limit=5');
+      setChars(data.results);
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
+  useEffect(() => {
+    getChars();
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <List list={chars} />
     </div>
   );
 }
